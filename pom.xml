@@ -79,6 +79,12 @@
         <!-- Docker image -->
         <docker.jib-maven-plugin.version>2.6.0</docker.jib-maven-plugin.version>
         <docker.image.prefix>springcommunity</docker.image.prefix>
+             <jacoco.version>0.8.6</jacoco.version>
+<sonar.java.coveragePjacocoPlugin></sonar.java.coveragePjacocoPlugin>
+<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+<sonar.language>java</sonar.language>
+
 
     </properties>
 
@@ -288,8 +294,10 @@
             <artifactId>javax.activation-api</artifactId>
             <version>${javax-activation.version}</version>
         </dependency>
-
-    </dependencies>
+         <groupId>org.jacoco</groupId>
+         <artifactId>jacoco-maven-plugin</artifactId>
+         <version>0.8.6</version>
+        </dependencies>
 
     <!-- Maven plugin versions are mentioned in order to guarantee the build reproducibility in the long term -->
     <build>
@@ -376,23 +384,25 @@
             </plugin>
 
             <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco-maven-plugin}</version>
-                <executions>
-                    <execution>
-                        <goals>
+               <groupId>org.jacoco</groupId>
+               <artifactId>jacoco-maven-plugin</artifactId>
+                      <version>${jacoco.version}</version>
+                      <executions>         
+                        <execution>
+                          <id>jacoco-initialize</id>
+                          <goals>
                             <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
+                            </goals>
+                        </execution>
+                        <execution>
+                          <id>jacoco-site</id>
+                          <phase>package</phase>
+                          <goals>
                             <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                                   </goals>
+                        </execution>
+                        </execution>
+                  
             </plugin>
 
             <!--Specify the encoding for copying resources-->
